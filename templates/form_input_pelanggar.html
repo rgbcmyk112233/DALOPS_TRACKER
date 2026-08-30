@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block title %}Input Data{% endblock %} {% block content %}
+
+<div class="container mt-5" style="max-width: 600px">
+  <div class="card shadow-sm">
+    <div class="card-body p-4">
+      <h3 class="text-center mb-4">Input Data Pelanggar</h3>
+
+      <form action="{{url_for('tambah_pelanggar')}}" method="POST">
+        <!-- Nama -->
+        <div class="mb-3">
+          <label for="nama" class="form-label">Nama</label>
+          <input type="text" class="form-control" id="nama" name="nama_pelanggar" placeholder="Masukkan nama" required />
+        </div>
+
+        <!-- NIK -->
+        <div class="mb-3">
+          <label for="nik" class="form-label">NIK</label>
+          <input type="text" class="form-control" id="nik" name="nik_pelanggar" placeholder="Masukkan NIK" required />
+        </div>
+
+        <!-- Nomor SIM -->
+        <div class="mb-3">
+          <label for="no_sim" class="form-label">Nomor SIM</label>
+          <input type="text" class="form-control" id="no_sim" name="no_sim_pelanggar" placeholder="Masukkan nomor SIM" />
+        </div>
+
+        <!-- Instansi -->
+        <div class="mb-4">
+          <label for="instansi" class="form-label">Instansi</label>
+          <input type="text" class="form-control" id="instansi" name="instansi_pelanggar" placeholder="Masukkan nama instansi" />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Simpan Data</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

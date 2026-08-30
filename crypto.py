@@ -23,7 +23,6 @@ def decode_string(param) : #fungsi decoding untuk tampilan frontend (input tuple
         token_decrypted = token.decode("utf-8")
         return token_decrypted
 
-    print(param)
     for i , item in enumerate(param) : #input list dipisah jadi per item, dan di decrypt secara rekursif
         listed_data.append(decode_string(item))
         

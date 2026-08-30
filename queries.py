@@ -14,9 +14,21 @@ def QueryCariPelanggar(conn, nama_pelanggar):
     """
 
     querycari = db.text("""
-        SELECT *
+        SELECT nama, "NIK"
         FROM profil_pelanggar
-        WHERE nama ILIKE :nama_pelanggar OR "NIK" ILIKE :nama_pelanggar
+        WHERE nama ILIKE :nama_pelanggar
     """)
 
     return conn.execute(querycari, {"nama_pelanggar": f"%{nama_pelanggar}%"}).fetchall()
+
+def QueryInputPelanggar(conn,nama_pelanggar,nik_pelanggar,no_sim_pelanggar,instansi_pelanggar):
+    query = db.text("""
+    INSERT INTO profil_pelanggar ("NIK","SIM",nama,instansi)
+    VALUES (:nik_pelanggar,:no_sim_pelanggar,:nama_pelanggar,:instansi_pelanggar)
+    """)
+
+    return conn.execute(query, 
+                        {"nama_pelanggar" : nama_pelanggar,
+                         "no_sim_pelanggar" : no_sim_pelanggar,
+                         "nik_pelanggar" : nik_pelanggar,
+                         "instansi_pelanggar" : instansi_pelanggar})

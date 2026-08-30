@@ -1,6 +1,6 @@
 from flask import Flask, flash, render_template, request, url_for, redirect, session
 from functools import wraps
-# import crypto
+import crypto
 from datetime import datetime
 from db import *
 from dotenv import load_dotenv
@@ -61,28 +61,36 @@ def cari_pelanggar():
     if request.method == "POST":
         with engine.connect() as conn:
             pelanggar_list = queries.QueryCariPelanggar(conn, nama_pelanggar)
-            NIK = [row[0] for row in pelanggar_list]
-            nama = [row[2] for row in pelanggar_list]
-            print(type(pelanggar_list[0]))
-            print(type(NIK))
+            NIK = [row[1] for row in pelanggar_list]
+            NIK = crypto.decode_string(NIK)
+            nama = [row[0] for row in pelanggar_list]
 
-            return render_template("dashboard.html", page="cari_pelanggar", pelanggar=pelanggar_list,nama = nama, NIK = NIK)
+            return render_template("dashboard.html", page="cari_pelanggar", pelanggar=pelanggar_list, nama = nama, NIK = NIK)
 
-   
+
 
     return render_template("dashboard.html", page="cari_pelanggar")
 
 
-@app.route("/tambah_pelanggaran", methods=["GET"]) #tambah pelanggaran
+@app.route("/tambah_pelanggaran", methods=["GET","POST"]) #tambah pelanggaran
 @auth_validate()
-def tambah_pelanggaran():
+def tambah_pelanggar():
+
+    if request.method == "POST" :
+        nama_pelanggar = request.form.get("nama_pelanggar")
+        NIK = crypto.encode_string(request.form.get("nik_pelanggar"))
+        SIM = crypto.encode_string(request.form.get("no_sim_pelanggar"))
+        instansi = request.form.get("instansi_pelanggar")
+
+        with engine.begin() as conn : #insert function
+            insertData = queries.QueryInputPelanggar(conn,nama_pelanggar,NIK,SIM,instansi)
 
 
 
 
-    return render_template("tambah_pelanggaran.html", page="tambah_pelanggaran")
+    return render_template("form_input_pelanggar.html", page="tambah_pelanggaran")
 
-@app.route("/profil_pelanggar", methods=["POST"]) #profil pelanggar
+@app.route("/profil_pelanggar", methods=["GET","POST"]) #profil pelanggar
 @auth_validate()
 def profil_pelanggar() :
 
