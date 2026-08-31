@@ -66,8 +66,8 @@ def cari_pelanggar():
             nama = [row[0] for row in pelanggar_list]
 
             return render_template("dashboard.html", page="cari_pelanggar", 
-                                   pelanggar=pelanggar_list, nama = nama, 
-                                   NIK = NIK, NIK_not_decoded = NIK_not_decoded)
+                                    pelanggar=pelanggar_list, nama = nama, 
+                                    NIK = NIK, NIK_not_decoded = NIK_not_decoded)
 
 
 
@@ -93,23 +93,31 @@ def tambah_pelanggar():
 @app.route("/profil_pelanggar", methods=["GET","POST"]) #profil pelanggar
 @auth_validate()
 def profil_pelanggar() :
+
     nik = request.form.get("identifier")
 
     with engine.connect() as conn :
         data_pelanggar = queries.QueryDataIndividu(conn,nik)
+        pelanggaran = queries.QueryCaripelanggaran(conn,nik) #masukkan fungsi nya ayo dipikirkan secara logika ayo ayo
 
+    #data pribadi user
     NIK = crypto.decode_string([row[0] for row in data_pelanggar])
     no_SIM = crypto.decode_string([row[1] for row in data_pelanggar])
     nama = [row[2] for row in data_pelanggar]
     instansi = [row[3] for row in data_pelanggar]
+
     #fungsi fetch data pelanggaran yang sudah dilakukan
-
-
+    tanggal = [row[0] for row in pelanggaran]
+    pasal = [row[1] for row in pelanggaran]
+    catatan_petugas = [row[2] for row in pelanggaran]
+    bunyi_pelanggaran = [row[3] for row in pelanggaran]
 
 
     return render_template("profil_pelanggar.html", page="profil_pelanggar",
                             NIK = NIK,no_SIM = no_SIM, nama = nama,
-                            instansi = instansi)
+                            instansi = instansi, tanggal = tanggal, pasal = pasal,
+                            catatan_petugas = catatan_petugas, pelanggaran = pelanggaran,
+                            bunyi_pelanggaran = bunyi_pelanggaran)
 
 
 if __name__ == "__main__":

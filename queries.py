@@ -43,3 +43,12 @@ def QueryDataIndividu(conn,nik_pelanggar):
     )
 
     return conn.execute(query,{"nik" : nik_pelanggar}).fetchall()
+
+def QueryCaripelanggaran(conn,nik_pelanggar) :
+    query = db.text("""
+    SELECT tanggal, jenis_pelanggaran, catatan_petugas, bunyi
+    FROM pelanggaran_view
+    WHERE "NIK" = :nik
+    """)
+    
+    return conn.execute(query, {"nik" : nik_pelanggar}).fetchall()

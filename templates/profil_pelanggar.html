@@ -12,7 +12,7 @@
 
         <!-- Data Pelanggar -->
         <div class="col-md-9">
-          <h3 class="fw-bold mb-4">{{ nama[0] }}</h3>
+          <h2 class="fw-bold mb-4">{{ nama[0] }}</h2>
 
           <div class="row">
             <div class="col-md-6 mb-3">
@@ -48,18 +48,20 @@
             <tr>
               <th style="width: 10%">No</th>
               <th>Tanggal</th>
-              <th>Jenis Pelanggaran</th>
+              <th>Pasal</th>
               <th style="width: 30%">pelanggaran</th>
               <th style="width: 30%">catatan petugas</th>
             </tr>
           </thead>
 
           <tbody>
-            {% for pelanggaran in pelanggaran_list %}
+            {% for i in pelanggaran %}
             <tr>
               <td>{{ loop.index }}</td>
-              <td>{{ pelanggaran.tanggal }}</td>
-              <td>{{ pelanggaran.jenis_pelanggaran }}</td>
+              <td>{{ tanggal[loop.index - 1] }}</td>
+              <td>{{ pasal[loop.index - 1] }}</td>
+              <td>{{bunyi_pelanggaran[loop.index - 1]}}</td>
+              <td style="color: #6c757d">{{catatan_petugas[loop.index - 1]}}</td>
             </tr>
 
             {% else %}
