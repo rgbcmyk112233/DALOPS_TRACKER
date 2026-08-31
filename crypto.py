@@ -13,7 +13,7 @@ def encode_string(param): #fungsi encoding untuk push ke database
 
     return token_encrypted
 
-def decode_string(param) : #fungsi decoding untuk tampilan frontend (input tuple expected)
+def decode_string(param) : #fungsi decoding untuk tampilan frontend (input list expected)
     listed_data = []
 
     if not isinstance(param, list) : #cek apakah input list, kalo tidak maka excecute jika tidak lanjut if else

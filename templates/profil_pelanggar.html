@@ -1,0 +1,75 @@
+{% extends "base.html" %} {% block title %}Profil Pelanggar{% endblock %} {% block content %}
+
+<div class="container py-5">
+  <!-- Card Profil -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+      <div class="row align-items-center">
+        <!-- Placeholder Foto -->
+        <div class="col-md-3 text-center mb-4 mb-md-0">
+          <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 150px; height: 150px; background-color: #e9ecef; border: 3px solid #dee2e6; font-size: 60px; color: #6c757d">👤</div>
+        </div>
+
+        <!-- Data Pelanggar -->
+        <div class="col-md-9">
+          <h3 class="fw-bold mb-4">{{ pelanggar.nama }}</h3>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <small class="text-muted">NIK</small>
+              <div class="fw-semibold">{{ pelanggar.nik }}</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <small class="text-muted">No. SIM</small>
+              <div class="fw-semibold">{{ pelanggar.sim }}</div>
+            </div>
+
+            <div class="col-md-12">
+              <small class="text-muted">Instansi</small>
+              <div class="fw-semibold">{{ pelanggar.instansi }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Riwayat Pelanggaran -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+      <h5 class="mb-0 fw-bold">Riwayat Pelanggaran</h5>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th style="width: 10%">No</th>
+              <th style="width: 30%">Tanggal</th>
+              <th>Jenis Pelanggaran</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for pelanggaran in pelanggaran_list %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ pelanggaran.tanggal }}</td>
+              <td>{{ pelanggaran.jenis_pelanggaran }}</td>
+            </tr>
+
+            {% else %}
+            <tr>
+              <td colspan="3" class="text-center text-muted py-4">Belum ada riwayat pelanggaran.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

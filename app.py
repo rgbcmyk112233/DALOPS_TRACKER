@@ -61,8 +61,8 @@ def cari_pelanggar():
     if request.method == "POST":
         with engine.connect() as conn:
             pelanggar_list = queries.QueryCariPelanggar(conn, nama_pelanggar)
-            NIK = [row[1] for row in pelanggar_list]
-            NIK = crypto.decode_string(NIK)
+            NIK = crypto.decode_string([row[1] for row in pelanggar_list])
+            # NIK = crypto.decode_string(NIK)
             nama = [row[0] for row in pelanggar_list]
 
             return render_template("dashboard.html", page="cari_pelanggar", pelanggar=pelanggar_list, nama = nama, NIK = NIK)
@@ -84,11 +84,9 @@ def tambah_pelanggar():
 
         with engine.begin() as conn : #insert function
             insertData = queries.QueryInputPelanggar(conn,nama_pelanggar,NIK,SIM,instansi)
-
-
-
-
+            
     return render_template("form_input_pelanggar.html", page="tambah_pelanggaran")
+
 
 @app.route("/profil_pelanggar", methods=["GET","POST"]) #profil pelanggar
 @auth_validate()
