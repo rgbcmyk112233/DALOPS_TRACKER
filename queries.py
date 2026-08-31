@@ -32,3 +32,14 @@ def QueryInputPelanggar(conn,nama_pelanggar,nik_pelanggar,no_sim_pelanggar,insta
                          "no_sim_pelanggar" : no_sim_pelanggar,
                          "nik_pelanggar" : nik_pelanggar,
                          "instansi_pelanggar" : instansi_pelanggar})
+
+
+def QueryDataIndividu(conn,nik_pelanggar):
+    query = db.text("""
+    SELECT *
+    FROM profil_pelanggar
+    WHERE "NIK" = :nik
+    """
+    )
+
+    return conn.execute(query,{"nik" : nik_pelanggar}).fetchall()
