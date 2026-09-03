@@ -62,6 +62,7 @@
               <td>{{ pasal[loop.index - 1] }}</td>
               <td>{{bunyi_pelanggaran[loop.index - 1]}}</td>
               <td style="color: #6c757d">{{catatan_petugas[loop.index - 1]}}</td>
+              <td></td>
             </tr>
 
             {% else %}
@@ -69,6 +70,11 @@
               <td colspan="5" class="text-center text-muted py-4">Belum ada riwayat pelanggaran.</td>
             </tr>
             {% endfor %}
+            <td colspan="5" class="text-center text-muted py-4">
+              <div class="d-flex justify-content-center">
+                <a href="{{ url_for('input_pelanggaran') }}" class="btn btn-success"> Tambahkan Data Pelanggar </a>
+              </div>
+            </td>
           </tbody>
         </table>
       </div>

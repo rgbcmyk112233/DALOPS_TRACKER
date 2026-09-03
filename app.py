@@ -6,9 +6,12 @@ from db import *
 from dotenv import load_dotenv
 import queries
 import auth
+import string
 
 app = Flask(__name__)
 load_dotenv(resource_path(".env"))
+
+nik_identifier = None
 
 # Secret Key untuk flash (bisa dipake buat session kalo udah butuh)
 app.secret_key = os.getenv("secret_key")
@@ -82,10 +85,17 @@ def tambah_pelanggar():
         nama_pelanggar = request.form.get("nama_pelanggar")
         NIK = crypto.encode_string(request.form.get("nik_pelanggar"))
         SIM = crypto.encode_string(request.form.get("no_sim_pelanggar"))
-        instansi = request.form.get("instansi_pelanggar")
+        instansi = request.form.get("instansi_pelanggar").upper()
+
+        global nik_identifier #passing encrypted NIK menggunakan Global variable
+        nik_identifier = NIK
 
         with engine.begin() as conn : #insert function
             insertData = queries.QueryInputPelanggar(conn,nama_pelanggar,NIK,SIM,instansi)
+
+        if insertData :
+            flash("Input data berhasil","success")
+            return redirect(url_for('profil_pelanggar'))
             
     return render_template("form_input_pelanggar.html", page="tambah_pelanggaran")
 
@@ -94,7 +104,14 @@ def tambah_pelanggar():
 @auth_validate()
 def profil_pelanggar() :
 
-    nik = request.form.get("identifier")
+    global nik_identifier
+
+    if nik_identifier is not None :
+        nik = nik_identifier
+    else :
+        nik = request.form.get("identifier")
+
+    nik_identifier = None #clean up variabel agar tidak terjadi bug
 
     with engine.connect() as conn :
         data_pelanggar = queries.QueryDataIndividu(conn,nik)
@@ -118,6 +135,14 @@ def profil_pelanggar() :
                             instansi = instansi, tanggal = tanggal, pasal = pasal,
                             catatan_petugas = catatan_petugas, pelanggaran = pelanggaran,
                             bunyi_pelanggaran = bunyi_pelanggaran)
+
+@app.route("/input_pelanggaran", methods = ["GET","POST"])
+@auth_validate()
+def input_pelanggaran() :
+
+
+
+    return render_template("form_input_pelanggaran.html", page = "input_pelanggaran")
 
 
 if __name__ == "__main__":
