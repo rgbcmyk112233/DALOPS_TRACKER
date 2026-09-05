@@ -72,7 +72,7 @@
             {% endfor %}
             <td colspan="5" class="text-center text-muted py-4">
               <div class="d-flex justify-content-center">
-                <a href="{{ url_for('input_pelanggaran') }}" class="btn btn-success"> Tambahkan Data Pelanggar </a>
+                <a href="{{ url_for('input_pelanggaran', nama = nama[0]) }}" class="btn btn-success"> Tambahkan Data Pelanggar </a>
               </div>
             </td>
           </tbody>

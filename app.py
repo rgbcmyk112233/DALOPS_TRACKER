@@ -77,7 +77,7 @@ def cari_pelanggar():
     return render_template("dashboard.html", page="cari_pelanggar")
 
 
-@app.route("/tambah_pelanggaran", methods=["GET","POST"]) #tambah pelanggaran
+@app.route("/input_pelanggar", methods=["GET","POST"]) #tambah pelanggaran
 @auth_validate()
 def tambah_pelanggar():
 
@@ -87,8 +87,8 @@ def tambah_pelanggar():
         SIM = crypto.encode_string(request.form.get("no_sim_pelanggar"))
         instansi = request.form.get("instansi_pelanggar").upper()
 
-        global nik_identifier #passing encrypted NIK menggunakan Global variable
-        nik_identifier = NIK
+        session["nik_pelanggar"] = NIK #passing encrypted NIK menggunakan Global variable
+        nik_identifier = session.get("nik_pelanggar")
 
         with engine.begin() as conn : #insert function
             insertData = queries.QueryInputPelanggar(conn,nama_pelanggar,NIK,SIM,instansi)
@@ -104,14 +104,12 @@ def tambah_pelanggar():
 @auth_validate()
 def profil_pelanggar() :
 
-    global nik_identifier
-
     if nik_identifier is not None :
         nik = nik_identifier
     else :
         nik = request.form.get("identifier")
 
-    nik_identifier = None #clean up variabel agar tidak terjadi bug
+    session.pop("nik_pelanggar",None) #clean up variabel agar tidak terjadi bug
 
     with engine.connect() as conn :
         data_pelanggar = queries.QueryDataIndividu(conn,nik)
@@ -136,13 +134,20 @@ def profil_pelanggar() :
                             catatan_petugas = catatan_petugas, pelanggaran = pelanggaran,
                             bunyi_pelanggaran = bunyi_pelanggaran)
 
-@app.route("/input_pelanggaran", methods = ["GET","POST"])
+@app.route("/input_pelanggaran/<nama>", methods = ["GET","POST"])
 @auth_validate()
-def input_pelanggaran() :
+def input_pelanggaran(nama) :
+
+    with engine.connect() as conn :
+        pasal = queries.QueryCariPasal(conn)
+
+    no_pasal = [row[0] for row in pasal]
+    bunyi_pasal =[row[1] for row in pasal]
 
 
-
-    return render_template("form_input_pelanggaran.html", page = "input_pelanggaran")
+    return render_template("form_input_pelanggaran.html", page = "input_pelanggaran",
+                            no_pasal = no_pasal, bunyi_pasal = bunyi_pasal, pasal = pasal,
+                            nama_pelanggar = nama)
 
 
 if __name__ == "__main__":

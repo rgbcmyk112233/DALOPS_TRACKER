@@ -52,3 +52,9 @@ def QueryCaripelanggaran(conn,nik_pelanggar) :
     """)
     
     return conn.execute(query, {"nik" : nik_pelanggar}).fetchall()
+
+def QueryCariPasal(conn):
+    query = db.text("""
+    SELECT * FROM pasal
+    """)
+    return conn.execute(query).fetchall()
